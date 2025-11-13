@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       // Display counts
-      cells[9].textContent = absences;
+      cells[10].textContent = absences;
       const participationPercent = Math.round((participations / 6) * 100) + '%';
-      cells[10].textContent = participationPercent;
+      cells[9].textContent = participationPercent;
 
       // Color based on absences
       if (absences < 3) {
@@ -166,9 +166,15 @@ document.addEventListener('DOMContentLoaded', function() {
         valid = false;
       }
 
+
       if (valid) {
         // store student in localStorage
-        const student = { id, lastName, firstName };
+const student = { 
+  id, 
+  lastName, 
+  firstName,
+  scores: ["", "", "", "", "", ""]  // <== HNA
+};
         let students = JSON.parse(localStorage.getItem('students')) || [];
         students.push(student);
         localStorage.setItem('students', JSON.stringify(students));
@@ -195,15 +201,24 @@ document.addEventListener('DOMContentLoaded', function() {
         <td>${student.id}</td>
         <td>${student.lastName}</td>
         <td>${student.firstName}</td>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
-        <td contenteditable="true"></td>
+       <td contenteditable="true">${student.scores?.[0] || ""}</td>
+        <td contenteditable="true">${student.scores?.[1] || ""}</td>
+        <td contenteditable="true">${student.scores?.[2] || ""}</td>
+        <td contenteditable="true">${student.scores?.[3] || ""}</td>
+        <td contenteditable="true">${student.scores?.[4] || ""}</td>
+        <td contenteditable="true">${student.scores?.[5] || ""}</td>
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+      <td><button class="delete-btn" data-id="${student.id}" style="color:red;">❌</button></td>
+
       `;
       tableBody.appendChild(row);
 
@@ -216,8 +231,29 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
             cell.textContent = ''; // optional: toggle off
           }
+              localStorage.setItem('students', JSON.stringify(students));
+
         });
       }
+      
+      // ======================= DELETE STUDENT =======================
+  tableBody.addEventListener("click", function (e) {
+    if (e.target.classList.contains("delete-btn")) {
+
+      const id = e.target.getAttribute("data-id");
+      let students = JSON.parse(localStorage.getItem("students")) || [];
+
+      students = students.filter(s => s.id != id);
+      localStorage.setItem("students", JSON.stringify(students));
+
+      e.target.closest("tr").remove();
+
+      alert("Student deleted ✔");
+    }   });
+     
+
+
+
 
     });
   }
@@ -326,3 +362,5 @@ function drawReportChart(total, present, participated, excluded) {
     }
   });
 } 
+// DELETE STUDENT
+

@@ -359,3 +359,15 @@ body.logout-page {
   padding: 10px 20px; /* height of btn */
   font-size: 16px; /* size of text */
 }
+
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: red;
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
+}
