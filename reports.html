@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttendFlow - Reports</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js" defer></script>
+
+</head>
+<body class="reports-page" style="background-color:#FFEAEA;">
+
+<nav class="navbar" style="background-color:#ffffff4c;">
+  <div class="logo">AttendFlow</div>
+  <ul class="nav-links">
+    <li><a href="home.html">Home</a></li>
+    <li><a href="attendance.html">Attendance</a></li>
+    <li><a href="addstudent.html">Add Student</a></li>
+    <li><a href="reports.html" class="active">Reports</a></li>
+    <li><a href="logout.html" class="logout">Logout</a></li>
+  </ul>
+</nav>
+
+<h1 class="page-title" style="color: #D75858;">Attendance Report</h1>
+<p style="color: blod#666;">This page show the overall attendence and participation statistics of the group.</p>
+<div class="stats-container">
+    <div class="stats-left">
+        <div class="stat-item">
+            <h3>Total Student</h3>
+            <h1 id="totalStudents">0</h1>
+        </div>
+        <div class="stat-item">
+            <h3>Present students</h3>
+            <h1 id="studentsPresent">0</h1>
+        </div>
+        <div class="stat-item">
+            <h3>Participated</h3>
+            <h1 id="studentsParticipated">0</h1>
+        </div>
+        <div class="stat-item">
+            <h3>Excluded</h3>
+            <h1>0</h1>
+        </div>
+    </div>
+    
+    <div class="stats-right">
+        <!-- Space for graph will go here -->
+        <canvas id="reportChart" width="400" height="300"></canvas>
+
+    </div>
+</div>
+
+<button class="view-btn"  ; onclick="updateReport()" ; style="background-color:#D75858;">Uppdate Report</button></a>
+
+
+</body>
+</html>
