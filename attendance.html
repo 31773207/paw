@@ -24,7 +24,7 @@
   </ul>
 </nav>
 
-<h1 class="page-title">Attendance List</h1>
+<h1 class="page-title" style="color: #459AA6; font-size: 50px;">Attendance List</h1>
 
 <table id="attendanceTable">
  <thead>
@@ -50,12 +50,12 @@
 
     <tr>
       <!-- Sub-headers for all sessions -->
-      <th>P</th> <th>A</th>
-      <th>P</th> <th>A</th>
-      <th>P</th> <th>A</th>
-      <th>P</th> <th>A</th>
-      <th>P</th> <th>A</th>
-      <th>P</th> <th>A</th>
+      <th>A</th> <th>P</th> 
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
 
     </tr>
   </thead>
@@ -64,13 +64,19 @@
     </tbody>
 </table>
 <div class="attend-btn" style="padding-top: 40px;">
-
-<button id="processBtn" class="view-btn" style="background-color:#51BBCC;">Update Attendance</button>
-<button id="highlightExcellent" class="view-btn" style="background-color:#51BBCC;">Highlight Excellent</button>
-<button id="resetColors" class="view-btn" style="background-color:#459AA6;">Reset Colors</button>
-<a href="reports.html"><button class="view-btn" style="background-color:#51BBCC;">Show Report</button></a>
-
+  <div class="left-btn">
+    <button id="processBtn" style="background-color:#51BBCC;">Update Attendance</button>
+    <button id="highlightExcellent" style="background-color:#51BBCC;">Highlight Excellent</button>
+    <button id="resetColors" style="background-color:#51BBCC;">Reset Colors</button>
+  </div>
+  <div class="right-btn">
+    <a href="reports.html">
+      <button style="background-color:#459AA6;">Show Report</button>
+    </a>
+  </div>
 </div>
+
+
 
 
 </body>

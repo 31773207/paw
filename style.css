@@ -24,8 +24,8 @@ body {
 }
 
 .logo {
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 900;
+  font-size: 2rem;
 }
 
 .nav-links {
@@ -170,10 +170,33 @@ th {
   background-color: #51BBCC;
   color: white;
 }
+/* Make right border of A column bold */
+#attendanceTable td:nth-child(3),
+#attendanceTable td:nth-child(5),
+#attendanceTable td:nth-child(7),
+#attendanceTable td:nth-child(9),
+#attendanceTable td:nth-child(11),
+#attendanceTable td:nth-child(13),
+#attendanceTable td:nth-child(15)
+ {
+  border-right: 2px solid #4c9eab; /* bold line between A and P */
+}
+
 .attend-btn {
+   display: flex;
+  justify-content: space-between; /* left group left, right group right */
+  align-items: center;
+  padding-top: 40px;
+
+}
+.right-btn {
+  display: flex;
+    font-size: 16px;
+
+}
+.left-btn {
   display: flex;
   gap: 40px;
-  margin-top: 40px;
 }
 /* =================== Add Student Page ====================== */
 body.addstudent-page {
@@ -280,18 +303,19 @@ body.reports-page {
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+        margin-top: 20px;
 }
 
 .stat-item h3 {
     color: #000000;
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 25px;
 }
 
 .stat-item h1 {
     color: #D75858;
     margin: 0;
-    font-size: 32px;
+    font-size: 40px;
 }
 
 .stats-right {

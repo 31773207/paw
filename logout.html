@@ -22,18 +22,43 @@
   </ul>
 </nav>
    <!-- Main content -->
-<div class="logout-container">
-    <h1 class="page-title" style="color: #1B3C38;">Logout Confirmation</h1>
-    <h3>Are you sur you wnat to logout?
-        <br><br> This will end your current session.
+<div class="logout-container" id="logoutContainer">
+    <h1 class="page-title" id="logoutTitle" style="color: #1B3C38;">Logout Confirmation</h1>
+    <h3 id="logoutMessage">
+        Are you sure you want to logout?<br><br>
+        This will end your current session.
     </h3>
-<div class="logout-btn">   
-    <a href="home.html"><button class="view-btn" style="background-color: #1B3C38;">Cancel</button></a>
-    <button class="view-btn" style="background-color: #1B3C38;">Logout</button>
-</div> 
+    <div class="logout-btn" id="logoutButtons">  
+        <a href="home.html"><button class="view-btn" style="background-color: #1B3C38;">Cancel</button></a> 
+        <button id="logoutBtn" class="view-btn" style="background-color: #1B3C38;">Logout</button>
+    </div> 
 </div>
+<!-- ====== Script for logout button ====== -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutTitle = document.getElementById('logoutTitle');
+        const logoutMessage = document.getElementById('logoutMessage');
+        const logoutButtons = document.getElementById('logoutButtons');
 
- 
+        logoutBtn.addEventListener('click', () => {
+            // Change title and message
+            logoutTitle.textContent = " 👋GOODBYE!";
+        logoutMessage.innerHTML = "Thank you for using AttendFlow!<br><br> You have been successfully logged out.";
+
+            // Remove old buttons
+            logoutButtons.innerHTML = "";
+
+            // Add new button to return to login/home
+            const returnBtn = document.createElement('a');
+            returnBtn.href = "home.html"; // or login page
+            returnBtn.innerHTML = `<button class="view-btn" style="background-color: #1B3C38; padding: 15px 10px; ">Return to Login</button>`;
+            logoutButtons.appendChild(returnBtn);
+        });
+    });
+    </script>
+
+
 
 </body>
 </html>

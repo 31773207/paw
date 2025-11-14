@@ -15,29 +15,26 @@ document.addEventListener('DOMContentLoaded', function() {
       let participations = 0;
 
       // Sessions = columns 3 to 8
-      for (let i = 3; i <= 8; i++) {
-        const mark = cells[i].textContent.trim();
+      for (let i = 3; i <= 14; i += 2) {
+        const attended  = cells[i].textContent.trim(); // A column
+        const participated = cells[i + 1].textContent.trim(); // P column
 
-        if (mark === "") {
-          absences++; // empty means absent
-        } else {
-          participations++; // anything written means present
+          // Count absence → only if ATTENDED is empty
+        if (attended === "") absences++;           // count absences
+        if (participated === "✓") participations++; // count participation independently
+
         }
-      }
 
       // Display counts
-      cells[10].textContent = absences;
+      cells[16].textContent = absences;
       const participationPercent = Math.round((participations / 6) * 100) + '%';
-      cells[9].textContent = participationPercent;
+      cells[15].textContent = participationPercent;
+
 
       // Color based on absences
-      if (absences < 3) {
-        row.style.backgroundColor = '#b3ffb3'; // green
-      } else if (absences >= 3 && absences <= 4) {
-        row.style.backgroundColor = '#ffff99'; // yellow
-      } else {
-        row.style.backgroundColor = '#ff9999'; // red
-      }
+      if (absences < 3) row.style.backgroundColor = '#b3ffb3';
+        else if (absences >= 3 && absences <= 4) row.style.backgroundColor = '#ffff99';
+        else row.style.backgroundColor = '#ff9999';
 
       // Message
       let message = '';
@@ -48,12 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         message = 'Excluded – too many absences – You need to participate more';
       }
-      cells[11].textContent = message;
-    });
+      cells[17].textContent = message;
+
+
   });
 
-  // highlight excellent Button
-  /*highlightExcellent.addEventListener('click', function() {
+  localStorage.setItem('students', JSON.stringify(students));
+})
+  /*// highlight excellent Button
+  highlightExcellent.addEventListener('click', function() {
     const rows = tableBody.querySelectorAll('tr');
     rows.forEach(row => {
       const participation = row.querySelectorAll('td')[10].textContent.trim();
@@ -75,29 +75,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ===================== Highlight Excellent Students =====================
   $('#highlightExcellent').click(function() {
-    $('#attendanceTable tbody tr').each(function() {
-      const absences = parseInt($(this).find('td:eq(9)').text()); // column 10 = absences
+  $('#attendanceTable tbody tr').each(function() {
+    const row = $(this); // store this row
+    const absencesText = row.find('td:eq(16)').text().trim(); // td index 16
+    const absences = parseInt(absencesText);
 
-      if (absences < 3) { // excellent student
-        // Add outline instantly
-        $(this).css('outline', '3px solid #00b3b3');
+    if (!isNaN(absences) && absences < 3) {
+      // Highlight excellent student
+      row.css({
+        'outline': '3px solid #00b3b3',
+        'background-color': '#b3ffb3'
+      });
 
-        // Animate: fade out → fade in → repeat
-        let step = 0;
-        const row = $(this);
-        const interval = setInterval(() => {
-          if (step < 4) {
-            row.fadeTo(150, row.css('opacity') == 1 ? 0.5 : 1);
-            step++;
-          } else {
-            clearInterval(interval);
-            row.css('opacity', 1);           // restore opacity
-            row.css('background-color', '#b3ffb3'); // final green
-          }
-        }, 300);
-      }
-    });
+      // Animate: fade out → fade in → repeat
+      let step = 0;
+      const interval = setInterval(() => {
+        if (step < 4) {
+          row.fadeTo(150, row.css('opacity') == 1 ? 0.5 : 1);
+          step++;
+        } else {
+          clearInterval(interval);
+          row.css('opacity', 1);                  // restore opacity
+          row.css('background-color', '#b3ffb3'); // final green
+        }
+      }, 300);
+    } 
   });
+});
 
   // ================= Reset Colors Button =================
   $('#resetColors').click(function() {
@@ -201,18 +205,18 @@ document.addEventListener('DOMContentLoaded', function() {
         <td>${student.id}</td>
         <td>${student.lastName}</td>
         <td>${student.firstName}</td>
-       <td contenteditable="true">${student.scores?.[0] || ""}</td>
+<td contenteditable="true">${student.scores?.[0] || ""}</td>
         <td contenteditable="true">${student.scores?.[1] || ""}</td>
         <td contenteditable="true">${student.scores?.[2] || ""}</td>
         <td contenteditable="true">${student.scores?.[3] || ""}</td>
         <td contenteditable="true">${student.scores?.[4] || ""}</td>
         <td contenteditable="true">${student.scores?.[5] || ""}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td contenteditable="true">${student.scores?.[6] || ""}</td>
+        <td contenteditable="true">${student.scores?.[7] || ""}</td>
+        <td contenteditable="true">${student.scores?.[8] || ""}</td>
+        <td contenteditable="true">${student.scores?.[9] || ""}</td>
+        <td contenteditable="true">${student.scores?.[10] || ""}</td>
+        <td contenteditable="true">${student.scores?.[11] || ""}</td>
         <td></td>
         <td></td>
         <td></td>
@@ -223,19 +227,24 @@ document.addEventListener('DOMContentLoaded', function() {
       tableBody.appendChild(row);
 
       // Make S1–S6 cells clickable to mark "X"
-      for (let i = 3; i <= 8; i++) {
-        const cell = row.cells[i];
-        cell.addEventListener('click', function() {
-          if (cell.textContent.trim() === '') {
-            cell.textContent = '✓'; // mark present
-          } else {
-            cell.textContent = ''; // optional: toggle off
-          }
-              localStorage.setItem('students', JSON.stringify(students));
-
-        });
+      for (let i = 3; i <= 14; i++) {
+  const cell = row.cells[i];
+  cell.addEventListener('click', function() {
+    const studentId = row.cells[0].textContent.trim();
+    const studentIndex = students.findIndex(s => s.id === studentId);
+    if(studentIndex !== -1){
+      if (cell.textContent.trim() === '') {
+        cell.textContent = '✓';
+        students[studentIndex].scores[i-3] = '✓'; // update score in array
+      } else {
+        cell.textContent = '';
+        students[studentIndex].scores[i-3] = '';
       }
-      
+      localStorage.setItem('students', JSON.stringify(students)); // save
+    }
+  });
+}
+
       // ======================= DELETE STUDENT =======================
   tableBody.addEventListener("click", function (e) {
     if (e.target.classList.contains("delete-btn")) {
@@ -268,18 +277,19 @@ $(document).ready(function() {
     // Store original background color (if already colored by processBtn)
     const originalColor = $row.css('background-color');
 
-    // 1 & 2. Highlight on hover, remove highlight on mouse leave
+    //Highlight on hover, remove highlight on mouse leave
     $row.hover(
       function() { // mouse enter
         $row.css('background-color', '#cceeff'); // light blue
       },
       function() { // mouse leave
         // restore color based on absences
-        const absences = parseInt($row.find('td:eq(9)').text());
+        const absences = parseInt($row.find('td:eq(16)').text());
         if (absences < 3) $row.css('background-color', '#b3ffb3'); // green
         else if (absences >= 3 && absences <= 4) $row.css('background-color', '#ffff99'); // yellow
-        else $row.css('background-color', '#ff9999'); // red
-      }
+      //else $(this).css('background-color', '#459AA6'); // red
+      $(this).removeClass('hovered'); // remove hover class     
+       }
     );
 
     // 3. Click to show full name + absences
@@ -321,6 +331,7 @@ function updateReport() {
   document.getElementById('totalStudents').textContent = totalStudents;
   document.getElementById('studentsPresent').textContent = studentsPresent;
   document.getElementById('studentsParticipated').textContent = studentsParticipated;
+  document.getElementById('studentsExcluded').textContent = studentsExcluded;
 
   // draw chart
   drawReportChart(totalStudents, studentsPresent, studentsParticipated, studentsExcluded);
@@ -363,4 +374,3 @@ function drawReportChart(total, present, participated, excluded) {
   });
 } 
 // DELETE STUDENT
-
