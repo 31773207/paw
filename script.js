@@ -52,25 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   localStorage.setItem('students', JSON.stringify(students));
 })
-  /*// highlight excellent Button
-  highlightExcellent.addEventListener('click', function() {
-    const rows = tableBody.querySelectorAll('tr');
-    rows.forEach(row => {
-      const participation = row.querySelectorAll('td')[10].textContent.trim();
-      if (participation === '100%') {
-        row.style.outline = '3px solid #00b3b3';
-      }
-    });
-  });
 
-  // Reset Colors Button
-  resetColors.addEventListener('click', function() {
-    const rows = tableBody.querySelectorAll('tr');
-    rows.forEach(row => {
-      row.style.backgroundColor = '';
-      row.style.outline = '';
-    });
-  });*/
+// highlight excellent Button
+  
   $(document).ready(function() {
 
   // ===================== Highlight Excellent Students =====================
@@ -103,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-  // ================= Reset Colors Button =================
+// ================= Reset Colors Button =================
   $('#resetColors').click(function() {
     $('#attendanceTable tbody tr').each(function() {
       $(this).css({
@@ -117,6 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 });
+
+
 
 // ================== ADD STUDENT FORM VALIDATION ==================
 document.addEventListener('DOMContentLoaded', function() {
@@ -189,6 +175,10 @@ const student = {
     });
   }
 });
+
+
+
+
 // ================== DISPLAY STUDENTS IN ATTENDANCE TABLE ==================
 document.addEventListener('DOMContentLoaded', function() {
   const tableBody = document.querySelector('#attendanceTable tbody');
@@ -245,7 +235,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 }
 
-      // ======================= DELETE STUDENT =======================
+
+
+// ======================= DELETE STUDENT =============================
   tableBody.addEventListener("click", function (e) {
     if (e.target.classList.contains("delete-btn")) {
 
@@ -261,12 +253,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }   });
      
 
-
-
-
     });
   }
 });
+
+
+
 
 // =============================== HOVER & CLICK jQuery ========================================
 $(document).ready(function() {
@@ -292,14 +284,10 @@ $(document).ready(function() {
        }
     );
 
-    // 3. Click to show full name + absences
-   /* $row.click(function() {
-      const fullName = $row.find('td:eq(1)').text() + ' ' + $row.find('td:eq(2)').text();
-      const absences = $row.find('td:eq(9)').text();
-      alert(`Student: ${fullName}\nAbsences: ${absences}`);
-    });*/
   });
 });
+
+
 
 // ================== ATTENDANCE REPORT ==================
 function updateReport() {
@@ -373,4 +361,3 @@ function drawReportChart(total, present, participated, excluded) {
     }
   });
 } 
-// DELETE STUDENT
