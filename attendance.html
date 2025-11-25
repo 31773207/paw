@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttendFlow - Attendance</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="script.js" defer></script>
+
+</head>
+<body class="attendance-page" >
+
+<nav class="navbar" style="background-color:#ffffff4c;">
+  <div class="logo">AttendFlow</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="attendance.html" class="active">Attendance</a></li>
+    <li><a href="addstudent.html">Add Student</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="logout.html" class="logout">Logout</a></li>
+  </ul>
+</nav>
+
+<h1 class="page-title" style="color: #459AA6; font-size: 50px;">Attendance List</h1>
+
+<table id="attendanceTable">
+ <thead>
+    <tr>
+      <th rowspan="2">ID</th>
+      <th rowspan="2">Last Name</th>
+      <th rowspan="2">First Name</th>
+
+      <th colspan="2">S1</th>
+      <th colspan="2">S2</th>
+      <th colspan="2">S3</th>
+      <th colspan="2">S4</th>
+      <th colspan="2">S5</th>
+      <th colspan="2">S6</th>
+
+      <th rowspan="2">Participation</th>
+      <th rowspan="2">Absence</th>
+      <th rowspan="2">Message</th>
+      <th rowspan="2">Delete</th>
+
+
+    </tr>
+
+    <tr>
+      <!-- Sub-headers for all sessions -->
+      <th>A</th> <th>P</th> 
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+      <th>A</th> <th>P</th>
+
+    </tr>
+  </thead>
+  <tbody> 
+      
+    </tbody>
+</table>
+<div class="attend-btn" style="padding-top: 40px;">
+  <div class="left-btn">
+    <button id="processBtn" style="background-color:#51BBCC;">Update Attendance</button>
+    <button id="highlightExcellent" style="background-color:#51BBCC;">Highlight Excellent</button>
+    <button id="resetColors" style="background-color:#51BBCC;">Reset Colors</button>
+  </div>
+  <div class="right-btn">
+    <a href="reports.html">
+      <button style="background-color:#459AA6;">Show Report</button>
+    </a>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
