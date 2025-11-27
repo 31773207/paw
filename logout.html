@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AttendFlow - Attendance Management System</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="prof/style.css">
         <script src="script.js" defer></script>
 
 
@@ -14,10 +14,10 @@
     <nav class="navbar" style="background-color:#ffffff4c;">
   <div class="logo">AttendFlow</div>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="attendance.html">Attendance</a></li>
-    <li><a href="addstudent.html">Add Student</a></li>
-    <li><a href="reports.html" >Reports</a></li>
+    <li><a href="prof/home.html">Home</a></li>
+    <li><a href="prof/attendance.html">Attendance</a></li>
+    <li><a href="prof/attendance.html">Add Student</a></li>
+    <li><a href="prof/reports.html" >Reports</a></li>
     <li><a href="logout.html" class="active">Logout</a></li>
   </ul>
 </nav>
@@ -29,7 +29,7 @@
         This will end your current session.
     </h3>
     <div class="logout-btn" id="logoutButtons">  
-        <a href="home.html"><button class="view-btn" style="background-color: #1B3C38;">Cancel</button></a> 
+        <a href="prof/home.html"><button class="view-btn" style="background-color: #1B3C38;">Cancel</button></a> 
         <button id="logoutBtn" class="view-btn" style="background-color: #1B3C38;">Logout</button>
     </div> 
 </div>
@@ -51,8 +51,8 @@
 
             // Add new button to return to login/home
             const returnBtn = document.createElement('a');
-            returnBtn.href = "home.html"; // or login page
-            returnBtn.innerHTML = `<button class="view-btn" style="background-color: #1B3C38; padding: 15px 10px; ">Return to Login</button>`;
+            returnBtn.href = "prof/home.html"; // or login page
+            returnBtn.innerHTML = `<a href="index.html"><button class="view-btn" style="background-color: #1B3C38; padding: 15px 10px; ">Return to Login</button></a>`;
             logoutButtons.appendChild(returnBtn);
         });
     });

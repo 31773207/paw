@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttendFlow - Attendance History</title>
+<link rel="stylesheet" href="student.css">
+<script src="script.js" defer></script>
+</head>
+<body class="home-page">
+
+<div class="mobile-container">
+
+    <!-- Navbar -->
+    <nav class="navbar" style="background-color:#ffffff4c;"> <!--links it with CSS rules for styling-->
+    <div class="logo"> <a href="index.html">AttendFlow </a></AttendFlow></div>
+    <ul class="nav-links">
+    <li><a href="../logout.html" class="logout">Logout</a></li>
+  </ul>
+  </nav>
+
+  <div class="page-content">
+    <h1 class="head-attend">Attendance History</h1>
+
+    <button class="back-btn" onclick="window.location.href='student_home.html';">&larr; Back</button>
+
+    <div class="attendance-rate">
+        <h2>85%</h2>
+        <p>Attendance Rate</p>
+    </div>
+
+    <div class="session-list">
+        <div class="session-card present">
+            <p>Session 1: 15/01/2025</p>
+            <span class="status-badge">Present</span>
+        </div>
+        <div class="session-card absent">
+            <p>Session 2: 16/01/2025</p>
+            <span class="status-badge">Absent</span>
+        </div>
+    </div>
+
+    <button class="upload-btn">Upload Justification</button>
+</div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const courseId = sessionStorage.getItem('currentCourseId');
+    
+    if (!courseId) {
+        window.location.href = 'student_home.html';
+        return;
+    }
+
+    // Load attendance data
+    fetch(`../backend/get_attendance.php?course_id=${courseId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Update attendance rate
+            document.querySelector('.attendance-rate h2').textContent = 
+                data.attendance_rate + '%';
+            
+            // Update session list
+            const sessionList = document.querySelector('.session-list');
+            sessionList.innerHTML = '';
+            
+            data.sessions.forEach(session => {
+                const statusClass = session.status === 'present' || session.status === 'late' ? 'present' : 'absent';
+                sessionList.innerHTML += `
+                    <div class="session-card ${statusClass}">
+                        <p>Session ${session.session_number}: ${session.attendance_date}</p>
+                        <span class="status-badge">${session.status}</span>
+                    </div>
+                `;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+});
+</script>
+
+</body>
+</html>
+

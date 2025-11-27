@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Students</title>
+</head>
+<body>
+    <h1>Debug Student Loading</h1>
+    <button onclick="testConnection()">Test Database Connection</button>
+    <button onclick="testGetStudents()">Test Get Students</button>
+    <div id="debugResult" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;"></div>
+
+    <script>
+        function testConnection() {
+            fetch('../db/get_students.php?course=WEB101&group=Group 01')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('debugResult').textContent = 'RAW RESPONSE:\n' + data;
+                })
+                .catch(error => {
+                    document.getElementById('debugResult').textContent = 'ERROR: ' + error;
+                });
+        }
+
+        function testGetStudents() {
+            fetch('../db/get_students.php?course=WEB101&group=Group 01')
+                .then(response => response.json())
+                .then(students => {
+                    document.getElementById('debugResult').textContent = 'STUDENTS DATA:\n' + JSON.stringify(students, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('debugResult').textContent = 'JSON PARSE ERROR: ' + error + '\n\nTrying to get raw response...';
+                    // Try to get raw response
+                    fetch('../db/get_students.php?course=WEB101&group=Group 01')
+                        .then(response => response.text())
+                        .then(text => {
+                            document.getElementById('debugResult').textContent += '\n\nRAW RESPONSE:\n' + text;
+                        });
+                });
+        }
+    </script>
+</body>
+</html>

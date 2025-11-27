@@ -1,0 +1,160 @@
+/* ===================== Body & Global ===================== */
+body {
+    font-family: Arial, sans-serif;
+    background: #6DC0B6;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===================== Main Container ===================== */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+/* Page Titles */
+h1 {
+    font-size: 50px;
+    color: #1B3C38;
+    margin-bottom: 5px;
+}
+h2 {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* ===================== Login Box ===================== */
+.login-box {
+    background-color: #ffffff4c;
+    padding: 25px;
+    border-radius: 40px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+.login-box h3 {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+}
+
+/* Inputs */
+input[type="text"], input[type="password"] {
+    width: 90%;
+    padding: 12px;
+    margin-top: 5px;
+    background-color: #ffffff92;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Remember Me */
+.remember-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.remember-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+/* ===================== Role Cards ===================== */
+.role-cards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.role-card {
+    flex: 1;
+    background: #326b647c;
+    border: 2px solid #1B3C38;
+    border-radius: 40px;
+    padding: 15px 5px;
+    margin: 5px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.role-card:hover {
+    background: #dce2ff;
+    transform: scale(1.05);
+}
+.role-card.selected {
+    background: #1B3C38;
+    color: #fff;
+    border-color: #6DC0B6;
+}
+
+/* ===================== Login Button ===================== */
+.login-btn {
+    width: 70%;
+    padding: 12px;
+    margin: 20px auto 0;
+    display: block;
+    background: #1B3C38;
+    color: white;
+    border: none;
+    border-radius: 70px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.login-btn:hover {
+    background: #6DC0B6;
+}
+
+/* ===================== Forgot Password ===================== */
+.forgot {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #333;
+    text-decoration: none;
+}
+.forgot:hover {
+    text-decoration: underline;
+}
+
+/* ===================== Footer ===================== */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #444;
+    font-size: 14px;
+}
+
+/* ===================== Responsive ===================== */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 40px;
+    }
+    h2 {
+        font-size: 14px;
+    }
+    .login-box {
+        padding: 20px;
+    }
+    .role-card {
+        padding: 12px 5px;
+        font-size: 14px;
+    }
+    .login-btn {
+        width: 80%;
+    }
+}

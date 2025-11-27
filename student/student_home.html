@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AttendFlow - Student Portal</title>
+    <link rel="stylesheet" href="student.css">
+</head>
+<body class="home-page">
+    <!-- Sidebar Navigation -->
+    <nav class="navbar" style="background-color:#ffffff4c;">
+        <div class="logo"><a href="index.html">AttendFlow</a></div>
+        <ul class="nav-links">
+            <li><a href="../logout.html" class="logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="home-container">
+        <!-- Header / Welcome -->
+        <header class="home-header">
+            <h1>My Enrolled Courses</h1>
+        </header>
+
+        <!-- Courses list -->
+        <section class="courses-section">
+            <div class="courses-list" id="coursesList">
+                <!-- Courses will be loaded here by JavaScript -->
+                <div style="text-align: center; padding: 20px;">
+                    Loading courses...
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 Loading courses from backend...');
+            
+            fetch('http://localhost/paw/db/get_courses.php')
+                .then(response => {
+                    console.log('📡 Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error('HTTP error! status: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(courses => {
+                    console.log('✅ Courses loaded:', courses);
+                    
+                    const container = document.getElementById('coursesList');
+                    container.innerHTML = '';
+                    
+                    if (courses.length === 0) {
+                        container.innerHTML = '<p>No courses enrolled</p>';
+                        return;
+                    }
+                    
+                    courses.forEach(course => {
+                        const courseCard = `
+                            <div class="course-card">
+                                <h2>${course.name}</h2>
+                                <p>Instructor: ${course.instructor}</p>
+                                <p>Group: ${course.student_group}</p>
+                                <button class="view-session-btn" 
+                                        onclick="viewAttendance('${course.id}')">
+                                    View Attendance
+                                </button>
+                            </div>
+                        `;
+                        container.innerHTML += courseCard;
+                    });
+                    
+                    console.log('🎉 Courses displayed successfully!');
+                })
+                .catch(error => {
+                    console.error('❌ Error loading courses:', error);
+                    
+                    const container = document.getElementById('coursesList');
+                    container.innerHTML = `
+                        <div style="color: red; padding: 20px; text-align: center;">
+                            <h3>Backend Connection Failed</h3>
+                            <p>Error: ${error.message}</p>
+                            <p>Showing demo data instead...</p>
+                            <div class="course-card">
+                                <h2>Web Development</h2>
+                                <p>Instructor: Dr. Sarah</p>
+                                <p>Group: Group 01</p>
+                                <button class="view-session-btn" 
+                                        onclick="viewAttendance('WEB101')">
+                                    View Attendance
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+        });
+
+        function viewAttendance(courseId) {
+            sessionStorage.setItem('currentCourseId', courseId);
+            window.location.href = 'student_attend.html';
+        }
+    </script>
+</body>
+</html>

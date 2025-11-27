@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttendFlow - Add Student</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+</head>
+
+<body class="addstudent-page" style="background-color:#F2D3FF;">
+
+<nav class="navbar" style="background-color:#ffffff4c;">
+  <div class="logo">AttendFlow</div>
+  <ul class="nav-links">
+    <li><a href="home.html">Home</a></li>
+    <li><a href="attendance.html">List</a></li>
+    <li><a href="addstudent.html" class="active">Add Student</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="../logout.html" class="logout">Logout</a></li>
+  </ul>
+</nav>
+
+<h1 class="page-title" style="color:#703E86; font-size: 50px">Add New Student</h1>
+<div class="form-container">
+  <form id="addStudentForm" class="student-form">
+      <div class="form-group">
+          <label for="studentId">Student ID:</label>
+          <input type="text" name="id" id="studentId" required>
+          <div class="error" id="idError"></div>
+      </div>
+      
+      <div class="form-group">
+          <label for="lastName">Last Name:</label>
+          <input type="text" name="lastName" id="lastName" required>
+          <div class="error" id="lastNameError"></div>
+      </div>
+      
+      <div class="form-group">
+          <label for="firstName">First Name:</label>
+          <input type="text" name="firstName" id="firstName" required>
+          <div class="error" id="firstNameError"></div>
+      </div>
+      
+      <!-- REMOVED EMAIL AND PHONE FIELDS -->
+      
+      <!-- Course and Group Selection -->
+      <div class="form-group">
+          <label for="course">Course:</label>
+          <select name="course" id="course" required>
+              <option value="">Select Course</option>
+              <option value="WEB101">Web Development</option>
+              <option value="DB101">Database Systems</option>
+              <option value="MATH201">Mathematics</option>
+          </select>
+          <div class="error" id="courseError"></div>
+      </div>
+
+      <div class="form-group">
+          <label for="group">Group:</label>
+          <select name="group" id="group" required>
+              <option value="">Select Group</option>
+              <option value="Group 01">Group 01</option>
+              <option value="Group 02">Group 02</option>
+              <option value="Group 03">Group 03</option>
+          </select>
+          <div class="error" id="groupError"></div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="view-btn" style="background-color:#DB8DFD;" onclick="clearForm()">Cancel</button>
+        <button type="submit" class="view-btn" style="background-color:#DB8DFD;">Add Student</button>
+      </div>
+  </form>
+</div>
+
+<script>
+function addStudent() {
+    // Get form values - only basic fields
+    const studentData = {
+        id: document.getElementById('studentId').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        firstName: document.getElementById('firstName').value.trim(),
+        course: document.getElementById('course').value,
+        group: document.getElementById('group').value
+    };
+
+    // Basic validation
+    if (!studentData.id || !studentData.lastName || !studentData.firstName || !studentData.course || !studentData.group) {
+        alert('Please fill all required fields');
+        return;
+    }
+
+    // Send to PHP
+    fetch('../db/add_student.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(studentData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ Student added successfully!');
+            clearForm();
+        } else {
+            alert('❌ Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('❌ Network error: ' + error.message);
+    });
+}
+
+function clearForm() {
+    document.getElementById('addStudentForm').reset();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        addStudent();
+    });
+});
+
+
+
+</script>
+
+</body>
+</html>

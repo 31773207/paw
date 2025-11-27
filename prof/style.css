@@ -13,6 +13,8 @@ body {
 }
 
 /* -------------------------------- Navbar------------------------------- */
+
+
 .navbar {
   padding: 15px 40px;
   display: flex; /*item in same line*/
@@ -24,7 +26,7 @@ body {
 }
 
 .logo {
-  font-weight: 900;
+  font-weight: 700;
   font-size: 2rem;
 }
 
@@ -112,35 +114,133 @@ button:hover, .view-btn:hover, .action-btn:hover {
 }
 
 /*============================= HOME====================*/
+/* =================== Professor Home =================== */
 body.home-page {
-  background-color: #DEF3FF;
-    padding: 40px; /*adds page padding like spacing*/
-
+  background-color: #CBDBFF; 
+}
+.prof-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.home-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 100px;   /* space below navbar */
-  text-align: center;
+.prof-header {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.title {
-  margin-bottom: 15px;
-  text-align: center;
-  font-size: 70px;
-  font-weight: 900;
+.prof-header h1 {
+    color: #000;
+    font-size: 26px;
 }
 
-.home-container p {
-  text-align: center;
-  margin-top: 25px;
-  margin-bottom: 35px;
-  font-size: 30px;
-  color: black;
+/* Courses Section */
+.courses-section h2 {
+    color: #51BBCC;
+    text-align: center;
+    margin-bottom: 25px;
 }
+
+.courses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.course-card {
+    background: #ffffffb0;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.2s;
+    margin-bottom: 20px;
+}
+
+.course-card:hover { transform: translateY(-5px); }
+
+.course-card h3 { margin-bottom: 10px; color: #51BBCC; font-size: 20px; }
+.course-card p { margin-bottom: 15px; color: #666; font-size: 16px; border-top: 1px solid #eee; padding-top: 8px; }
+
+.view-session-btn {
+    width: 100%;
+    padding: 10px;
+    background: #51BBCC;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.view-session-btn:hover { background: #3f94a1; }
+
+
+
+/* =================== Back Button =================== */
+.back-btn {
+    margin: 15px;
+    padding: 8px 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    background: #51BBCC;
+    color: white;
+    border-radius: 6px;
+    width: fit-content;
+}
+
+.back-btn:hover { background: #2a53b4; }
+
+/* =================== Sessions Page =================== */
+body.sessions-page {
+    background: #CBDBFF;
+    min-height: 100vh;
+    padding: 40px;
+}
+
+
+.session-container { max-width: 900px; margin: auto; padding: 20px; }
+.session-header { text-align: center; margin-bottom: 25px; }
+.session-header h1 { color: #51BBCC; margin-top: 0; }
+.session-header p { color: #555; }
+
+.sessions-list { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+
+.session-card {
+    background: #ffffff4c;
+    padding: 20px;
+    width: 400px;
+    height: 200px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.session-card:hover { transform: translateY(-5px); }
+
+.session-card button {
+    margin-top: 15px;
+    background: #51BBCC;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.session-card button:hover { background: #2a53b4; }
+
 
 
 
@@ -396,6 +496,10 @@ body.logout-page {
   transform: scale(1.2);
 }
 /* Responsive */
+
+/* ======================= RESPONSIVE ======================= */
+
+/* Responsive */
 /* ========== MOBILE MEDIA QUERY ========== */
 @media screen and (max-width: 600px) {
 
@@ -434,5 +538,189 @@ body.logout-page {
     flex-direction: column;
     gap: 15px;
   }
+/* ========== TABLE RESPONSIVE STYLES ========== */
+#attendanceTable {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+@media screen and (max-width: 900px) {
+    #attendanceTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #attendanceTable table {
+        min-width: 800px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #attendanceTable {
+        font-size: 11px;
+    }
+    
+    #attendanceTable table {
+        min-width: 700px;
+    }
+    
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 6px 4px;
+    }
+}
+/* ========== BUTTON RESPONSIVE STYLES ========== */
+@media screen and (max-width: 900px) {
+    .attend-btn {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 0;
+    }
+    
+    .left-btn, .right-btn {
+        justify-content: center;
+        width: 100%;
+        gap: 10px;
+    }
+    
+    .left-btn {
+        flex-wrap: wrap;
+    }
+}
+
+    /* Button container */
+    .attend-btn {
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 20px;
+    }
+    
+    /* Button groups */
+    .left-btn, .right-btn {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+    
+    /* Individual buttons */
+    #processBtn,
+    #highlightExcellent,
+    #resetColors,
+    .right-btn button {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        margin: 2px 0;
+    }
+    
+    /* Load Students button */
+    #loadStudentsBtn {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    
+    /* Selection bar buttons */
+    .selection-bar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .selection-bar label {
+        margin-right: 0;
+        margin-bottom: 10px;
+        display: block;
+    }
+    
+    /* Select dropdowns */
+    #courseSelect, #groupSelect {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+}
+
+/* ========== FORM GROUP STYLES ========== */
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23333' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #459AA6;
+    box-shadow: 0 0 0 3px rgba(69, 154, 166, 0.1);
+}
+
+.form-group select:hover {
+    border-color: #51BBCC;
+}
+
+.error {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+    min-height: 18px;
+}
+
+/* Responsive styles for form groups */
+@media screen and (max-width: 900px) {
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 13px;
+        background-position: right 12px center;
+    }
+    
+    .error {
+        font-size: 11px;
+    }
 }

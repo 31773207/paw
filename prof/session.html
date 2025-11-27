@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Sessions</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Course session data - Add this at the top
+        const courseSessions = {
+            'webdev': {
+                name: 'Web Applications Development',
+                sessions: [
+                    { id: 1, date: '2025-01-15', time: '10:00 AM' },
+                    { id: 2, date: '2025-01-22', time: '10:00 AM' },
+                    { id: 3, date: '2025-01-29', time: '10:00 AM' },
+                    { id: 4, date: '2025-02-05', time: '10:00 AM' },
+                    { id: 5, date: '2025-02-12', time: '10:00 AM' },
+                    { id: 6, date: '2025-02-19', time: '10:00 AM' }
+                ]
+            },
+            'database': {
+                name: 'Database Management Systems', 
+                sessions: [
+                    { id: 1, date: '2025-01-16', time: '02:00 PM' },
+                    { id: 2, date: '2025-01-23', time: '02:00 PM' },
+                    { id: 3, date: '2025-01-30', time: '02:00 PM' },
+                    { id: 4, date: '2025-02-06', time: '02:00 PM' },
+                    { id: 5, date: '2025-02-13', time: '02:00 PM' },
+                    { id: 6, date: '2025-02-20', time: '02:00 PM' }
+                ]
+            },
+            'network': {
+                name: 'Computer Networks & Security',
+                sessions: [
+                    { id: 1, date: '2025-01-17', time: '09:00 AM' },
+                    { id: 2, date: '2025-01-24', time: '09:00 AM' },
+                    { id: 3, date: '2025-01-31', time: '09:00 AM' },
+                    { id: 4, date: '2025-02-07', time: '09:00 AM' },
+                    { id: 5, date: '2025-02-14', time: '09:00 AM' },
+                    { id: 6, date: '2025-02-21', time: '09:00 AM' }
+                ]
+            }
+        };
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+        }
+
+        // Load sessions when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get course data from sessionStorage (set from home page)
+            const courseData = JSON.parse(sessionStorage.getItem('currentCourse'));
+            
+            if (courseData && courseSessions[courseData.courseId]) {
+                const courseInfo = courseSessions[courseData.courseId];
+                
+                // Update module name in header
+                const moduleHeader = document.querySelector('.session-header h1');
+                if (moduleHeader) {
+                    moduleHeader.textContent = `Module: ${courseInfo.name}`;
+                }
+
+                // Update sessions list
+                const sessionsList = document.querySelector('.sessions-list');
+                if (sessionsList) {
+                    sessionsList.innerHTML = courseInfo.sessions.map(session => `
+                        <div class="session-card">
+                            <h1>Session ${session.id}</h1>
+                            <p>Date: ${formatDate(session.date)}</p>
+                            <p>${session.time}</p>
+                            <!-- CHANGED: Now goes to attend_mark.html -->
+                            <button onclick="markAttendance(${session.id}, '${session.date}', '${courseData.courseId}', '${courseData.group}', '${courseInfo.name}')">
+                                Mark Attendance
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                // If no course data, redirect to home
+                window.location.href = 'home.html';
+            }
+        });
+
+        // Function to handle marking attendance - UPDATED for attend_mark.html
+        function markAttendance(sessionId, sessionDate, courseId, group, courseName) {
+            // Store session data for the attendance page
+            sessionStorage.setItem('currentSession', JSON.stringify({
+                sessionId: sessionId,
+                sessionDate: sessionDate,
+                courseId: courseId,
+                group: group,
+                courseName: courseName
+            }));
+            
+            // CHANGED: Redirect to attend_mark.html instead of attendance.html
+            window.location.href = 'attend_mark.html';
+        }
+    </script>
+</head>
+
+<body class="sessions-page">
+
+   <nav class="navbar" style="background-color:#ffffff4c;">
+  <div class="logo">AttendFlow</div>
+  <ul class="nav-links">
+    <li><a href="home.html" class="active">Home</a></li>
+    <li><a href="attendance.html">List</a></li>
+    <li><a href="addstudent.html">Add Student</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="../logout.html">Logout</a></li>
+  </ul>
+</nav>
+
+<!-- ---------------- BACK BUTTON ---------------- -->
+<a href="home.html"><div class="back-btn">← Back to Courses</div></a>
+
+<!-- ---------------- MAIN PAGE CONTAINER ---------------- -->
+<div class="session-container">
+
+    <!-- Page header: module name + description -->
+    <header class="session-header">
+        <h1>Module: Loading...</h1>
+        <p>Select a session to mark attendance</p>
+    </header>
+
+    <!-- ---------------- LIST OF ALL SESSIONS ---------------- -->
+    <section class="sessions-list">
+        <!-- Sessions will be loaded dynamically by JavaScript -->
+    </section>
+
+</div>
+
+</body>
+</html>

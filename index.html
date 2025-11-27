@@ -3,35 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AttendFlow - Attendance Management System</title>
-    <link rel="stylesheet" href="style.css">
-        <script src="script.js" defer></script>
+    <title>Login | Attendance System</title>
 
+    <!-- Link external CSS -->
+    <link rel="stylesheet" href="login.css">
+
+    <!-- jQuery for role selection -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="home-page">
-    <!-- Sidebar Navigation -->
-        <nav class="navbar" style="background-color:#ffffff4c;"> <!--links it with CSS rules for styling-->
-    <div class="logo">AttendFlow</div>
-    <ul class="nav-links">
-    <li><a href="index.html" class="active">Home</a></li>
-    <li><a href="attendance.html">Attendance</a></li>
-    <li><a href="addstudent.html">Add Student</a></li>
-    <li><a href="reports.html">Reports</a></li>
-    <li><a href="logout.html" class="logout">Logout</a></li>
-  </ul>
-  </nav>
-   <!-- Main content -->
 
-<div class="home-container">
-        <h1  class="title" style="color: #35a8bd; margin-top: 0px;">AttendFlow</h1>
-        <p class="description">
-          Welcome to the attendance management system.<br>
-          you can view attendance reports, add students, and <br>
-          manage attendance through this interface.
-        </p>
-        <a href="attendance.html"><button class="view-btn" style="background-color:#51BBCC; width: 300px; padding: 20px 50px; font-size: 25px; ">View  Attendance</button></a>
-      </div>
- 
+<body>
+
+<!-- Main container to center the login form -->
+<div class="login-container">
+
+    <!-- Page title -->
+    <h1>AttendFlow
+    </h1>
+    <h2> Student Attendance Management System</h2>
+
+    <!-- Login box card -->
+    <div class="login-box">
+
+        <h3>Login to Your Account</h3>
+
+         <!-- Role selection cards -->
+        <label>Select Role</label>
+        <div class="role-cards">
+            <div class="role-card" data-role="student">Student</div>
+            <div class="role-card" data-role="professor">Professor</div>
+            <div class="role-card" data-role="admin">Administrator</div>
+        </div>
+         <!-- Hidden input to store selected role -->
+        <input type="hidden" id="selectedRole" name="role">
+
+        <!-- Email input -->
+        <label>Email or Username</label>
+        <input type="text" >
+
+        <!-- Password input -->
+        <label>Password</label>
+        <input type="password" >
+
+        <!-- Remember Me checkbox -->
+        <div class="remember-row">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember Me</label>
+        </div>
+
+
+        <!-- Hidden input to store selected role -->
+        <input type="hidden" id="selectedRole" name="role">
+
+        <!-- Login button -->
+        <button class="login-btn">Login</button>
+
+        <!-- Forgot password link -->
+        <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <!-- Footer -->
+    <p class="footer">© 2025 Algiers University – Attendance System</p>
+</div>
+
+<!-- jQuery script to handle role selection -->
+<script>
+    // When a role card is clicked
+    $(".role-card").click(function() {
+        // Remove 'selected' class from all cards
+        $(".role-card").removeClass("selected");
+
+        // Add 'selected' class to the clicked card
+        $(this).addClass("selected");
+
+        // Save the selected role in the hidden input
+        $("#selectedRole").val($(this).data("role"));
+    });
+
+    // Optional: show alert if login is clicked without selecting a role
+   $(".login-btn").click(function() {
+    const role = $("#selectedRole").val();
+    if (role === "") {
+        alert("Please select a role before logging in!");
+    } else {
+        // Redirect based on role
+        if (role === "student") {
+            window.location.href = "student/student_home.html";
+        } else if (role === "professor") {
+            window.location.href = "prof/home.html"; // professor page
+        } else if (role === "admin") {
+            window.location.href = "admin/admin.html";
+        }
+    }
+    });
+</script>
 
 </body>
 </html>

@@ -1,0 +1,125 @@
+/* ===================== Body & Global ===================== */
+body {
+    font-family: Arial, sans-serif;
+    background: #F2D3FF;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===================== Navbar ===================== */
+.navbar {
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 40px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    display: block;
+    padding: 10px 0;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+}
+
+.nav-links a.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #895D9C;
+    border-radius: 2px;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.logout {
+    font-weight: 700;
+    cursor: pointer;
+}
+/* Admin page container */
+.prof-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.prof-header h1 {
+    font-size: 2.2rem;
+    color: #895D9C;
+    margin-bottom: 30px;
+}
+
+/* Courses list heading */
+.prof-container h2 {
+    font-size: 2rem; /* replace inline style */
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Admin list cards container */
+.admin-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* spacing between cards */
+    justify-content: flex-start;
+}
+
+/* Each card */
+.list-card {
+    flex: 1 1 200px; /* responsive width */
+    background: #F9E9FF;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.list-card h1 {
+    font-size: 2rem;
+    color: #895D9C;
+    margin-bottom: 10px;
+}
+
+.list-card h3 {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Card hover effect */
+.list-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Navbar links hover */
+.nav-links li a:hover {
+    color: #633bb2;
+    font-weight: 600;
+}
+
+/* Active link */
+.nav-links li a.active {
+    border-bottom: 2px solid #895D9C;
+}
