@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+   <!--- <script src="script.js" defer></script>-->
 </head>
 
-<body class="attendance-page">
 
+<body class="attendance-page">
     <!-- NAVBAR -->
-    <nav class="navbar" style="background-color:#ffffff4c;">
+    <nav class="navbar">
         <div class="logo">AttendFlow</div>
         <ul class="nav-links">
             <li><a href="home.html" class="active">Home</a></li>
             <li><a href="attendance.html">List</a></li>
             <li><a href="addstudent.html">Add Student</a></li>
-            <li><a href="report.php">Reports</a></li>
-            <li><a href="../auth/logout.html" class="logout">Logout</a></li>
+            <li><a href="report.html">Reports</a></li>
+            <li><a href="../logout.html" class="logout">Logout</a></li>
         </ul>
     </nav>
 
@@ -57,6 +57,337 @@
         <button id="saveAttendance" class="open-session-btn"> 💾 Save Attendance</button>
     </div>
     
-   
+    <script>
+        // Course data with proper names and sessions
+        const courseData = {
+            'webdev': {
+                name: 'Web Applications Development',
+                sessions: [
+                    { id: 1, date: '2025-01-15', time: '10:00 AM' },
+                    { id: 2, date: '2025-01-22', time: '10:00 AM' },
+                    { id: 3, date: '2025-01-29', time: '10:00 AM' },
+                    { id: 4, date: '2025-02-05', time: '10:00 AM' },
+                    { id: 5, date: '2025-02-12', time: '10:00 AM' },
+                    { id: 6, date: '2025-02-19', time: '10:00 AM' }
+                ]
+            },
+            'database': {
+                name: 'Database Management Systems',
+                sessions: [
+                    { id: 1, date: '2025-01-16', time: '02:00 PM' },
+                    { id: 2, date: '2025-01-23', time: '02:00 PM' },
+                    { id: 3, date: '2025-01-30', time: '02:00 PM' },
+                    { id: 4, date: '2025-02-06', time: '02:00 PM' },
+                    { id: 5, date: '2025-02-13', time: '02:00 PM' },
+                    { id: 6, date: '2025-02-20', time: '02:00 PM' }
+                ]
+            }
+        };
+
+        // Load dynamic data when page opens
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to get data from sessionStorage first (from session page)
+            const sessionData = JSON.parse(sessionStorage.getItem('currentSession') || '{}');
+            
+            let course, group, sessionId, sessionDate, courseName;
+
+            if (sessionData.courseId) {
+                // Data from sessionStorage
+                course = sessionData.courseId;
+                group = sessionData.group;
+                sessionId = sessionData.sessionId;
+                sessionDate = sessionData.sessionDate;
+                courseName = sessionData.courseName;
+            } else {
+                // Fallback to URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                course = urlParams.get('course') || 'webdev';
+                group = urlParams.get('group') || 'Group 01';
+                sessionId = urlParams.get('session') || '1';
+                sessionDate = urlParams.get('date') || '2025-01-15';
+                courseName = courseData[course]?.name || 'Web Applications Development';
+            }
+
+            // Update header dynamically
+            updateHeader(courseName, sessionId, sessionDate, group);
+            
+            // Load students for this course/group
+            loadStudents(course, group, sessionId);
+        });
+
+        function updateHeader(courseName, sessionId, sessionDate, group) {
+            const formattedDate = formatDate(sessionDate);
+            
+            document.getElementById('moduleName').textContent = courseName;
+            document.getElementById('sessionInfo').textContent = 
+                `Session ${sessionId} | Date: ${formattedDate} | Group: ${group}`;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+        }
+
+        function loadStudents(course, group, sessionId) {
+            console.log('Loading students for:', course, group, sessionId);
+            
+            // Show loading
+            document.getElementById('studentsTableBody').innerHTML = 
+                '<tr><td colspan="5" style="text-align: center; padding: 20px;">🔄 Loading students...</td></tr>';
+
+            // Try to load from database first
+            fetch(`../db/get_students.php?course=WEB101&group=${group}`)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    console.log('Raw response:', text);
+                    
+                    // Try to parse as JSON
+                    try {
+                        // Remove any PHP comments from the response
+                        const cleanJson = text.replace(/\/\*.*?\*\//g, '');
+                        const students = JSON.parse(cleanJson);
+                        console.log('Parsed students:', students);
+                        
+                        if (students && students.length > 0) {
+                            displayStudents(students);
+                        } else {
+                            throw new Error('No students received from database');
+                        }
+                    } catch (e) {
+                        console.error('JSON parse error:', e);
+                        // Use fallback data
+                        useFallbackStudents();
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    // Use fallback data
+                    useFallbackStudents();
+                });
+        }
+
+        function useFallbackStudents() {
+            console.log('Using fallback student data');
+            const fallbackStudents = [
+                { id: '2023001', last_name: 'Ben Ahmed', first_name: 'Ali' },
+                { id: '2023002', last_name: 'Toumi', first_name: 'Sarah' },
+                { id: '2023003', last_name: 'Youcef', first_name: 'Hiba' },
+                { id: '2023004', last_name: 'Benzerga', first_name: 'Mohamed' },
+                { id: '2023005', last_name: 'Boudiaf', first_name: 'Fatima' }
+            ];
+            displayStudents(fallbackStudents);
+        }
+
+        function displayStudents(students) {
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = '';
+
+            if (!students || students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="error-message">No students found for this course/group</td></tr>';
+                return;
+            }
+
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.id}</td>
+                    <td>${student.last_name} ${student.first_name}</td>
+                    <td class="present-cell clickable" data-status="empty"></td>
+                    <td class="participation-cell clickable" data-participation="empty"></td>
+                    <td><button class="view-btn" onclick="viewJustification('${student.id}')">View</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Add click functionality
+            addClickHandlers();
+        }
+
+        function addClickHandlers() {
+            // Present cell click - cycles through options
+            document.querySelectorAll('.present-cell.clickable').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const currentStatus = this.getAttribute('data-status');
+                    let newStatus, newSymbol;
+                    
+                    if (currentStatus === 'empty') {
+                        newStatus = 'present';
+                        newSymbol = '✅';
+                    } else if (currentStatus === 'present') {
+                        newStatus = 'absent';
+                        newSymbol = '❌';
+                    } else if (currentStatus === 'absent') {
+                        newStatus = 'late';
+                        newSymbol = '⏰';
+                    } else {
+                        newStatus = 'empty';
+                        newSymbol = '';
+                    }
+                    
+                    this.setAttribute('data-status', newStatus);
+                    this.textContent = newSymbol;
+                    
+                    // Add color coding
+                    this.style.backgroundColor = newStatus === 'present' ? '#d4ffd4' : 
+                                               newStatus === 'absent' ? '#ffd4d4' : 
+                                               newStatus === 'late' ? '#fff9d4' : '';
+                });
+            });
+
+            // Participation cell click - cycles through options
+            document.querySelectorAll('.participation-cell.clickable').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const currentLevel = this.getAttribute('data-participation');
+                    let newLevel, newSymbol;
+                    
+                    if (currentLevel === 'empty') {
+                        newLevel = 'active';
+                        newSymbol = '⭐';
+                    } else if (currentLevel === 'active') {
+                        newLevel = 'average';
+                        newSymbol = '🔶';
+                    } else if (currentLevel === 'average') {
+                        newLevel = 'minimal';
+                        newSymbol = '🔻';
+                    } else {
+                        newLevel = 'empty';
+                        newSymbol = '';
+                    }
+                    
+                    this.setAttribute('data-participation', newLevel);
+                    this.textContent = newSymbol;
+                    
+                    // Add color coding
+                    this.style.backgroundColor = newLevel === 'active' ? '#e6f7ff' : 
+                                               newLevel === 'average' ? '#fff9e6' : 
+                                               newLevel === 'minimal' ? '#ffe6e6' : '';
+                });
+            });
+        }
+
+        function viewJustification(studentId) {
+            alert(`View justification for student ${studentId}`);
+        }
+
+        // Save attendance to DATABASE
+        document.getElementById('saveAttendance').addEventListener('click', function() {
+            const sessionData = JSON.parse(sessionStorage.getItem('currentSession') || '{}');
+            
+            const course = sessionData.courseId || 'webdev';
+            const group = sessionData.group || 'Group 01';
+            const sessionId = sessionData.sessionId || '1';
+            const sessionDate = sessionData.sessionDate || '2025-01-15';
+            
+            // Convert course code to database format
+            const dbCourse = getDBCourseCode(course);
+            const attendanceData = [];
+            let hasUnmarkedStudents = false;
+            
+            document.querySelectorAll('#studentsTableBody tr').forEach(row => {
+                // Skip if it's the error message row
+                if (row.cells.length < 5) return;
+                
+                const cells = row.cells;
+                const studentId = cells[0].textContent;
+                const studentName = cells[1].textContent;
+                const attendanceStatus = cells[2].getAttribute('data-status') || 'empty';
+                const participationLevel = cells[3].getAttribute('data-participation') || 'empty';
+                
+                // Check if attendance is marked
+                if (attendanceStatus === 'empty') {
+                    hasUnmarkedStudents = true;
+                    cells[2].style.backgroundColor = '#ffcccc';
+                    cells[2].style.animation = 'blink 1s infinite';
+                    return;
+                }
+                
+                // Convert status to database format
+                let dbStatus = attendanceStatus;
+                
+                // Convert participation level to percentage
+                let participationPercent = 0;
+                if (participationLevel === 'active') participationPercent = 100;
+                else if (participationLevel === 'average') participationPercent = 60;
+                else if (participationLevel === 'minimal') participationPercent = 20;
+                
+                attendanceData.push({
+                    student_id: studentId,
+                    student_name: studentName,
+                    course_id: dbCourse,
+                    group: group,
+                    session_id: sessionId,
+                    session_date: sessionDate,
+                    status: dbStatus,
+                    participation: participationPercent
+                });
+            });
+            
+            if (hasUnmarkedStudents) {
+                alert('❌ Please mark attendance for all students before saving!');
+                return;
+            }
+            
+            if (attendanceData.length === 0) {
+                alert('❌ No attendance data to save!');
+                return;
+            }
+            
+            console.log('Saving attendance data:', attendanceData);
+            
+            // Save to database
+            fetch('../db/save_attendance.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    attendance: attendanceData,
+                    course: dbCourse,
+                    group: group,
+                    session_id: sessionId,
+                    session_date: sessionDate
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Attendance saved successfully for ' + data.count + ' students!');
+                    // Optionally redirect or clear form
+                    // window.location.href = 'attendance.html';
+                } else {
+                    alert('❌ Error saving attendance: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Network error saving attendance. Check console for details.');
+            });
+        });
+
+        // Helper function to convert course codes
+        function getDBCourseCode(course) {
+            const courseMap = {
+                'webdev': 'WEB101',
+                'database': 'DB101',
+                'network': 'NET101'
+            };
+            return courseMap[course] || 'WEB101';
+        }
+    </script>
 </body>
 </html>
