@@ -7,31 +7,29 @@ $dbname = 'attendflow_db';
 $username = 'root';
 $password = '';
 
-// Get parameters
-$course = $_GET['course'] ?? 'webdev';
-$group = $_GET['group'] ?? 'group1';
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    // Get students for specific course and group
+    // Test query
     $sql = "SELECT s.id, s.first_name, s.last_name 
             FROM students s
             JOIN enrollment e ON s.id = e.student_id
-            WHERE e.course_id = ? AND e.student_group = ?
-            ORDER BY s.last_name, s.first_name";
+            WHERE e.course_id = 'webdev' AND e.student_group = 'group1'
+            ORDER BY s.last_name";
     
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$course, $group]);
+    $stmt = $pdo->query($sql);
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo json_encode($students);
+    echo json_encode([
+        'success' => true,
+        'count' => count($students),
+        'students' => $students
+    ]);
     
 } catch(PDOException $e) {
-    http_response_code(500);
     echo json_encode([
-        'error' => 'Database error: ' . $e->getMessage()
+        'success' => false,
+        'error' => $e->getMessage()
     ]);
 }
 ?>

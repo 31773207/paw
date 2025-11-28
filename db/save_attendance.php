@@ -1,13 +1,8 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
-
-// Handle preflight request
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit(0);
-}
 
 $host = 'localhost';
 $dbname = 'attendflow_db';
@@ -16,39 +11,54 @@ $password = '';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
+if (!$input) {
+    echo json_encode(['success' => false, 'error' => 'No data received']);
+    exit;
+}
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    $course = $input['course'];
-    $attendanceData = $input['attendance'];
-    $group = 'Group 01'; // You can get this from input if needed
+    $course = $input['course'] ?? 'webdev';
+    $attendanceData = $input['attendance'] ?? [];
     
     $pdo->beginTransaction();
     
-    // Use your actual column names: session_id and group_name
-    $sql = "INSERT INTO mark_attendance (student_id, course_id, group_name, session_id, status, participation) 
-            VALUES (?, ?, ?, ?, ?, ?) 
-            ON DUPLICATE KEY UPDATE 
-            status = VALUES(status), participation = VALUES(participation)";
-    
-    $stmt = $pdo->prepare($sql);
-    
+    $count = 0;
     foreach ($attendanceData as $record) {
+        $student_id = $record['student_id'];
+        $session_id = $record['session'];
+        $status = $record['status'];
+        $participation = $record['participation'] ?? 0;
+        
+        // Use INSERT ... ON DUPLICATE KEY UPDATE since you have UNIQUE constraint
+        $sql = "INSERT INTO mark_attendance (student_id, course_id, group_name, session_id, status, participation) 
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE 
+                status = VALUES(status), 
+                participation = VALUES(participation),
+                recorded_at = CURRENT_TIMESTAMP";
+        
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            $record['student_id'],
+            $student_id,
             $course,
-            $group, // Using the group variable
-            $record['session'], // This maps to session_id in your table
-            $record['status'],
-            $record['participation']
+            'group1', // You might want to pass group dynamically
+            $session_id,
+            $status,
+            $participation
         ]);
+        
+        $count++;
     }
     
     $pdo->commit();
-    echo json_encode(['success' => true, 'message' => 'Attendance saved successfully']);
+    echo json_encode(['success' => true, 'count' => $count, 'message' => 'Attendance saved successfully']);
     
 } catch(PDOException $e) {
     if (isset($pdo)) $pdo->rollBack();
+    http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
 }
 ?>
