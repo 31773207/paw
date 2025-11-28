@@ -724,3 +724,57 @@ body.logout-page {
         font-size: 11px;
     }
 }
+/* ===================== FULL RESPONSIVE TABLE ===================== */
+
+/* Force scroll on small screens */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#attendanceTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* minimum structure */
+}
+
+/* Adjustments for tablets */
+@media screen and (max-width: 900px) {
+    #attendanceTable {
+        min-width: 500px;
+    }
+
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+/* Adjustments for phones */
+@media screen and (max-width: 600px) {
+    #attendanceTable {
+        min-width: 420px;
+    }
+
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 6px;
+        font-size: 11px;
+    }
+}
+
+/* Extra small phones (under 400px) */
+@media screen and (max-width: 400px) {
+    #attendanceTable {
+        min-width: 350px;
+    }
+
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 5px;
+        font-size: 10px;
+    }
+}
+

@@ -74,57 +74,6 @@
   </form>
 </div>
 
-<!--<script>
-function addStudent() {
-    // Get form values - only basic fields
-    const studentData = {
-        id: document.getElementById('studentId').value.trim(),
-        lastName: document.getElementById('lastName').value.trim(),
-        firstName: document.getElementById('firstName').value.trim(),
-        course: document.getElementById('course').value,
-        group: document.getElementById('group').value
-    };
 
-    // Basic validation
-    if (!studentData.id || !studentData.lastName || !studentData.firstName || !studentData.course || !studentData.group) {
-        alert('Please fill all required fields');
-        return;
-    }
-
-    // Send to PHP
-    fetch('../db/add_student.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(studentData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('✅ Student added successfully!');
-            clearForm();
-        } else {
-            alert('❌ Error: ' + data.error);
-        }
-    })
-    .catch(error => {
-        alert('❌ Network error: ' + error.message);
-    });
-}
-
-function clearForm() {
-    document.getElementById('addStudentForm').reset();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('addStudentForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        addStudent();
-    });
-});
-
-
-
-</script>
---
 </body>
 </html>

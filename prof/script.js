@@ -831,7 +831,7 @@ function getStatusMessage(presentCount) {
     if (presentCount >= 4) return 'Good ✅';
     if (presentCount >= 3) return 'Warning ⚠️';
     return 'Critical 🚨';
-}
+  }
 
 // UPDATE YOUR EVENT LISTENER
 if (processBtn) {
@@ -888,77 +888,90 @@ function markAttendance(sessionId, sessionDate, courseId, group, courseName) {
 }
 
 // ===================== REPORTS PAGE FUNCTIONS =====================
+
 function updateReport() {
-    // read students from localStorage
-    const students = JSON.parse(localStorage.getItem('students')) || [];
+    const course = document.getElementById('courseSelect')?.value || 'WEB101';
+    const group = document.getElementById('groupSelect')?.value || 'group1';
     
-    let totalStudents = students.length;
-    let studentsPresent = 0;       // at least one session filled
-    let studentsParticipated = 0;  // more than 50% sessions present
-    let studentsExcluded = 0;      // too many absences (>=5)
-  
-    students.forEach(student => {
-      const row = student.rowData; // we will store this later if needed
-      let presentCount = 0;
-  
-      // S1-S6 data stored in student.scores (optional, if dynamic)
-      if(student.scores){
-        student.scores.forEach(mark => {
-          if(mark !== "") presentCount++;
+    console.log('🚀 Getting report from PHP for:', course, group);
+    
+    // Show loading
+    document.getElementById('totalStudents').textContent = '...';
+    document.getElementById('studentsPresent').textContent = '...';
+    document.getElementById('studentsParticipated').textContent = '...';
+    document.getElementById('studentsExcluded').textContent = '...';
+    
+    // Single call to report.php - it does all the database work
+    fetch(`../db/report.php?course=${course}&group=${group}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('📊 Report data received:', data);
+            
+            // Update the page with data from database
+            document.getElementById('totalStudents').textContent = data.totalStudents;
+            document.getElementById('studentsPresent').textContent = data.studentsPresent;
+            document.getElementById('studentsParticipated').textContent = data.studentsParticipated;
+            document.getElementById('studentsExcluded').textContent = data.studentsExcluded;
+            
+            // Draw chart
+            drawReportChart(data.totalStudents, data.studentsPresent, data.studentsParticipated, data.studentsExcluded);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resetReportToZero();
         });
-      }
-  
-      if(presentCount > 0) studentsPresent++;
-      if(presentCount >= 3) studentsParticipated++; // participated >=50% sessions
-      if(presentCount <= 1) studentsExcluded++;
-    });
-  
-    // Update HTML
-    document.getElementById('totalStudents').textContent = totalStudents;
-    document.getElementById('studentsPresent').textContent = studentsPresent;
-    document.getElementById('studentsParticipated').textContent = studentsParticipated;
-    document.getElementById('studentsExcluded').textContent = studentsExcluded;
-  
-    // draw chart
-    drawReportChart(totalStudents, studentsPresent, studentsParticipated, studentsExcluded);
+}
+
+function resetReportToZero() {
+    document.getElementById('totalStudents').textContent = '0';
+    document.getElementById('studentsPresent').textContent = '0';
+    document.getElementById('studentsParticipated').textContent = '0';
+    document.getElementById('studentsExcluded').textContent = '0';
+    drawReportChart(0, 0, 0, 0);
 }
 
 function drawReportChart(total, present, participated, excluded) {
-    const ctx = document.getElementById('reportChart').getContext('2d');
-  
-    // destroy old chart if exists
-    if(window.myChart) window.myChart.destroy();
-  
-    window.myChart = new Chart(ctx, {
-      type: 'bar',  // bar chart for clear visualization
-      data: {
-        labels: ['Total Students', 'Present', 'Participated', 'Excluded'], //show under each bar
-        datasets: [{
-          label: 'Attendance Statistics',
-          data: [total, present, participated, excluded],
-          backgroundColor: ['#D75858','#51BBCC','#b3ffb3','#ff9999'],
-          borderColor: ['#D75858','#51BBCC','#b3ffb3','#ff9999'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          title: {
-            display: true,
-            text: 'Attendance Report'
-          }
+    const canvas = document.getElementById('reportChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Destroy old chart if exists
+    if (window.reportChart && typeof window.reportChart.destroy === 'function') {
+        window.reportChart.destroy();
+    }
+    
+    // Create new chart
+    window.reportChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Total Students', 'Present', 'Participated', 'Excluded'],
+            datasets: [{
+                label: 'Attendance Statistics',
+                data: [total, present, participated, excluded],
+                backgroundColor: ['#D75858', '#51BBCC', '#b3ffb3', '#ff9999'],
+                borderWidth: 1
+            }]
         },
-        scales: {
-          y: {
-            beginAtZero: true,
-            stepSize: 1
-          }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Attendance Report'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }
         }
-      }
     });
 }
+
 
 // ===================== PAGE INITIALIZATION =====================
 document.addEventListener('DOMContentLoaded', function() {
